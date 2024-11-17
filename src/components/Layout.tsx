@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { LayoutDashboard, Users, Megaphone, LogOut } from "lucide-react";
 
@@ -6,16 +6,18 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
-function Layout({ children }: LayoutProps) {
+function Layout({ }: LayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const userName = localStorage.getItem("google_name") || "User"; // Get user name from localStorage
 
   // Check if the user is logged in, if not, redirect to login page
-  if (!localStorage.getItem("google_token")) {
-    navigate("/login");
-    return null; // Prevent rendering content if not logged in
-  }
+  useEffect(() => {
+    if (!localStorage.getItem("google_token")) {
+      navigate("/login");
+    }
+  },[])
+  
 
   const handleSignOut = () => {
     localStorage.removeItem("google_token"); // Remove token on sign out
